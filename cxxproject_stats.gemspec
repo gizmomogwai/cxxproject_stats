@@ -14,5 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "cxxproject_stats"
   gem.require_paths = ["lib"]
   gem.version       = CxxprojectStats::VERSION
-#  gem.add_dependency 'cxxproject'
+  gem.add_dependency 'cxxproject'
+  gem.add_dependency 'haml'
 end
