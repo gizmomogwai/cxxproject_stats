@@ -1,7 +1,11 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/cxxproject_stats/version', __FILE__)
+gem_name = 'cxxproject_stats'
+require File.expand_path("lib/#{gem_name}/version")
 
 Gem::Specification.new do |gem|
+  gem.name          = gem_name
+  gem.version       = CxxprojectStats::VERSION
+
   gem.authors       = ["Christian Köstlin"]
   gem.email         = ["christian.koestlin@esrlabs.com"]
   gem.description   = %q{creates some stats for cxx-projects}
@@ -11,9 +15,7 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "cxxproject_stats"
   gem.require_paths = ["lib"]
-  gem.version       = CxxprojectStats::VERSION
 
   gem.add_dependency 'cxx'
   gem.add_dependency 'haml'
