@@ -32,8 +32,59 @@ cxx_plugin do |ruby_dsl, building_blocks, log|
 
   directory ruby_dsl.build_dir
 
+  def dot_for_exe
+    "tab"
+  end
+  def dot_for_static
+    "folder"
+  end
+  def dot_for_shared
+    "component"
+  end
+  def dot_for_binary
+    "box"
+  end
+  def building_block_to_shape(bb, log)
+    if bb.is_a?(Cxxproject::Executable)
+      return dot_for_exe
+    elsif bb.is_a?(Cxxproject::StaticLibrary)
+      return dot_for_static
+    elsif bb.is_a?(Cxxproject::SharedLibrary)
+      return dot_for_shared
+    elsif bb.is_a?(Cxxproject::BinaryLibrary)
+      return dot_for_binary
+    else
+      log.error "unknown building block: #{bb}"
+      return "plaintext"
+    end
+  end
+
   desc 'print building block stats'
   task :stats => ruby_dsl.build_dir do
+    dot_file = File.join(ruby_dsl.build_dir, 'dependencies.dot')
+    File.open(dot_file, 'w') do |out|
+      out.puts("digraph DependencyTree {")
+      building_blocks.each do |name, bb|
+        out.puts("\"#{name}\" [shape=\"#{building_block_to_shape(bb, log)}\"];")
+        bb.dependencies.each do |d|
+          out.puts("\"#{name}\" -> \"#{d}\"")
+        end
+      end
+      out.puts("  subgraph cluster_legend {")
+      out.puts("    label = \"Legend\";")
+      out.puts("    edge [style=invis];")
+      out.puts("    graph[style=dotted];")
+      out.puts("    \"executables\" [shape=\"#{dot_for_exe}\"];")
+      out.puts("    \"static libraries\" [shape=\"#{dot_for_static}\"];")
+      out.puts("    \"shared libraries\" [shape=\"#{dot_for_shared}\"];")
+      out.puts("    \"binary libraries\" [shape=\"#{dot_for_binary}\"];")
+      out.puts("    \"executables\" -> \"static libraries\" -> \"shared libraries\" -> \"binary libraries\";")
+      out.puts("  }")
+      out.puts("}")
+    end
+    svg_file = File.join(ruby_dsl.build_dir, 'dependencies.svg')
+    sh "dot -Tsvg #{dot_file} -o#{svg_file}"
+
     io = StringIO.new
     io.puts('%html')
     io.puts('  %head')
@@ -48,6 +99,7 @@ cxx_plugin do |ruby_dsl, building_blocks, log|
       handle_exe(memo, building_blocks, bb, ' '*4, log)
       memo
     end
+    io.puts('    %img{:src=>"dependencies.svg"}')
     engine = Haml::Engine.new(io.string)
     File.open(File.join(ruby_dsl.build_dir, 'stats.out.html'), 'w') do |out|
       out.puts(engine.render)
