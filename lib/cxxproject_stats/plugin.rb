@@ -12,10 +12,14 @@ cxx_plugin do |ruby_dsl, building_blocks, log|
     io.puts(indent + '%div.details')
     bbs.each do |bb|
       if bb.kind_of?(Cxxproject::HasSources)
-        io.puts(indent + "  %p Sources of #{bb.name}: #{bb.sources.size}")
-        io.puts(indent + '  %ul')
+        io.puts(indent + '  %table')
+        io.puts(indent + '    %tr')
+        io.puts(indent + '      %td')
+        io.puts(indent + "        %img{:src=>\"#{bb.name}.svg\"}")
+        io.puts(indent + '      %td')
+        io.puts(indent + '        %ul')
         bb.sources.each do |s|
-          io.puts(indent + "    %li #{s}")
+          io.puts(indent + "          %li #{s}")
         end
       end
     end
@@ -59,10 +63,18 @@ cxx_plugin do |ruby_dsl, building_blocks, log|
     end
   end
 
+  def write_svg(name, ruby_dsl, &block)
+    dot_file = File.join(ruby_dsl.build_dir, "#{name}.dot")
+    svg_file = File.join(ruby_dsl.build_dir, "#{name}.svg")
+    File.open(dot_file, 'w') do |out|
+      block.call(out)
+    end
+    sh "dot -Tsvg #{dot_file} -o#{svg_file}"
+  end
+
   desc 'print building block stats'
   task :stats => ruby_dsl.build_dir do
-    dot_file = File.join(ruby_dsl.build_dir, 'dependencies.dot')
-    File.open(dot_file, 'w') do |out|
+    write_svg('dependencies', ruby_dsl) do |out|
       out.puts("digraph DependencyTree {")
       building_blocks.each do |name, bb|
         out.puts("\"#{name}\" [shape=\"#{building_block_to_shape(bb, log)}\"];")
@@ -82,8 +94,17 @@ cxx_plugin do |ruby_dsl, building_blocks, log|
       out.puts("  }")
       out.puts("}")
     end
-    svg_file = File.join(ruby_dsl.build_dir, 'dependencies.svg')
-    sh "dot -Tsvg #{dot_file} -o#{svg_file}"
+
+    building_blocks.each do |name, bb|
+      if bb.kind_of?(Cxxproject::HasSources)
+        template = "digraph DependencyTree { \"#{name}\" [shape=\"#{building_block_to_shape(bb, log)}\", label=\<\<table border=\"0\"><tr><td align=\"left\">Name:</td><td align=\"left\">#{name}</td></tr><tr><td align=\"left\">Sources:</td><td align=\"left\">#{bb.sources.size}</td></tr></table>> ];}"
+        dot_file = File.join(ruby_dsl.build_dir, "#{name}.dot")
+        svg_file = File.join(ruby_dsl.build_dir, "#{name}.svg")
+        write_svg(name, ruby_dsl) do |io|
+          io.puts(template)
+        end
+      end
+    end
 
     io = StringIO.new
     io.puts('%html')
@@ -95,7 +116,6 @@ cxx_plugin do |ruby_dsl, building_blocks, log|
     io.puts('  %body')
     res = building_blocks.inject(io) do |memo, pair|
       key, bb = pair
-      log.error building_blocks.size
       handle_exe(memo, building_blocks, bb, ' '*4, log)
       memo
     end
