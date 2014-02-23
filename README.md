@@ -1,29 +1,15 @@
-# CxxprojectStats
-
-TODO: Write a gem description
+# Statistics plugin for cxx
+outputs simple statistics for you cxx project.
 
 ## Installation
+after installing the gem
 
-Add this line to your application's Gemfile:
+    gem install cxxproject_stats
 
-    gem 'cxxproject_stats'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install cxxproject_stats
+cxx will find the plugin automatically.
 
 ## Usage
-
-TODO: Write usage instructions here
+The plugin creates a new target called stats (see rake -T).
 
 ## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+To see some example output head over to [http://gizmomogwai.github.io/cxxproject_stats]
