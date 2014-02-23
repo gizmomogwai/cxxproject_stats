@@ -1,0 +1,1 @@
+{"name":"CxxProject Stats","tagline":"outputs some statistics about your cxx project","body":"### Installation\r\nJust install the gem, cxx will find it automatically:\r\n\r\n```\r\n$ gem install cxxproject_stats\r\n```\r\n","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
