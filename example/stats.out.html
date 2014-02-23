@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <title>Some Stats</title>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js' type='text/javascript'></script>
+    <script>
+      $(document).ready(function() {$("div.details").hide();$("h1").click(function() {$(this).next().toggle();});});
+    </script>
+  </head>
+  <body>
+    <h1>
+      <p class='details_toggle'>Executable 'basic' total sources: 5</p>
+    </h1>
+    <div class='details'>
+      <table>
+        <tr>
+          <td>
+            <img src='basic.svg'>
+          </td>
+          <td>
+            <ul>
+              <li>help.cpp</li>
+              <li>main.cpp</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <td>
+            <img src='2.svg'>
+          </td>
+          <td>
+            <ul>
+              <li>lib2.cpp</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <td>
+            <img src='1.svg'>
+          </td>
+          <td>
+            <ul>
+              <li>lib1.cpp</li>
+              <li>lib11.cpp</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <h1>
+      <p class='details_toggle'>Executable 'debug' total sources: 5</p>
+    </h1>
+    <div class='details'>
+      <table>
+        <tr>
+          <td>
+            <img src='debug.svg'>
+          </td>
+          <td>
+            <ul>
+              <li>help.cpp</li>
+              <li>main.cpp</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <td>
+            <img src='2_debug.svg'>
+          </td>
+          <td>
+            <ul>
+              <li>lib2.cpp</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <td>
+            <img src='1.svg'>
+          </td>
+          <td>
+            <ul>
+              <li>lib1.cpp</li>
+              <li>lib11.cpp</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <img src='dependencies.svg'>
+  </body>
+</html>
