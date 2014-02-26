@@ -12,4 +12,4 @@ cxx will find the plugin automatically.
 The plugin creates a new target called stats (see rake -T).
 
 ## Contributing
-To see some example output head over to [http://gizmomogwai.github.io/cxxproject_stats]
+To see some example output head over to http://gizmomogwai.github.io/cxxproject_stats
